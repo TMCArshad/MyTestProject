@@ -1,6 +1,8 @@
 public with sharing class AccountController { 
 private string accountID = '';
 public String str{get;set;} 
+public String str1{get;set;} 
+public String str2{get;set;} 
 public Account accountItem{get;set;} 
 public AccountController(){ 
 //Constructor 
