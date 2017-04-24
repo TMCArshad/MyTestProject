@@ -1,0 +1,10 @@
+<apex:page standardController="Account" showHeader="false" sidebar="false" extensions="RSSNewsReader">
+<apex:form id="yahooFormId">
+<apex:pageBlock >
+	<apex:inputText value="{!zipCode}" id="zipCode" html-placeholder="Search By zipCode"/> 
+	<apex:pageBlockButtons location="Bottom" >
+	    <apex:commandButton value="Get Weather" action="{!getWeather}" reRender="myTable"/>
+	</apex:pageBlockButtons>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

@@ -1,0 +1,321 @@
+<apex:page controller="jTableAccountsController" showHeader="false">
+
+<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/redmond/jquery-ui.css" rel="stylesheet" type="text/css" />
+
+<link href="{!URLFOR($Resource.jtable, 'jtable.2.4.0/themes/jqueryui/jtable_jqueryui.min.css')}" rel="stylesheet" type="text/css" />
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"/>
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"/>
+
+<apex:includeScript value="{!URLFOR($Resource.jtable, 'jtable.2.4.0/jquery.jtable.min.js')}"/>
+
+<apex:remoteObjects >
+    <apex:remoteObjectModel jsShortHand="acct" name="Account" fields="Id,Name,Phone,Fax"
+        retrieve="{!$RemoteAction.jTableAccountsController.retrieveAccts}"/>
+        
+    <apex:remoteObjectModel jsShortHand="opp" name="Opportunity" fields="Id,Name,AccountId,StageName,Probability,Amount,CloseDate"/>
+    <apex:remoteObjectModel jsShortHand="con" name="Contact" fields="Id,AccountId,FirstName,LastName,Phone,Email"/>
+</apex:remoteObjects>
+
+<script>
+
+var $j = jQuery.noConflict();
+$j(document).ready(function() {
+    $j("#records").jtable({
+        title: "Accounts",
+        jqueryuiTheme: true, 
+        saveUserPreferences: false,
+        
+        paging: true,
+        pageSize: 10,
+        pageSizes: [10, 25, 50, 75, 100],
+        
+        fields: {
+            Id: {
+                key: true,
+                list: false
+            },
+            Opportunities: {
+                title: "",
+                width: "1%",
+                sorting: false,
+                openChildAsAccordion: true,
+                create: false,
+                edit: false,
+                display: function(account) {
+                    return setupChildren(account, opportunityConfig);
+                }
+            },
+            Contacts: {
+                title: "",
+                width: "1%",
+                sorting: false,
+                openChildAsAccordion: true,
+                create: false,
+                edit: false,
+                display: function(account) {
+                    return setupChildren(account, contactConfig);
+                }
+            },
+            Name: { title: "Name" },
+            Phone: { title: "Phone" },
+            Fax: { title: "Fax" }
+        },
+        actions: {
+            listAction: function (postData, jtParams) {
+                return listAccounts(postData, jtParams);
+            },
+            createAction: function (postData) {
+                return upsert(new SObjectModel.acct(getFields(postData)), getAccountObject);  
+            },
+            updateAction: function(postData) {
+                return upsert(new SObjectModel.acct(getFields(postData)), getAccountObject);
+            }
+        }
+    });
+    
+    $j("#records").jtable("load");
+    
+        
+        function listAccounts(postData, jtParams) {
+            var limitVal = jtParams.jtPageSize;
+            var offsetVal = jtParams.jtStartIndex;
+            
+            var criteria = {
+                limit: limitVal,
+                orderby: [ {Name: "ASC NULLS LAST"} ]
+            };
+            // offsetVal must be at least 1
+            if (offsetVal >= 1) {
+                criteria.offset = offsetVal;
+            }
+            
+            return retrieve(new SObjectModel.acct(), getAccountObject, criteria);
+        }
+        
+        function getAccountObject(record) {
+            return {
+                Id : record.get("Id"),
+                Name : record.get("Name"),
+                Phone : record.get("Phone"),
+                Fax : record.get("Fax")
+            };
+        }
+      
+    
+    function setupChildren(account, configFunc) {
+        var config = configFunc(account);
+        var openLink = $j("<img src='" + config.img + "' title='" + config.title + "' alt='" + config.title + "' />");
+        openLink.click(function(event) {
+            event.preventDefault();
+            
+            $j("#records").jtable("openChildTable", openLink.closest("tr"), config, function(data) {
+                data.childTable.jtable("load");
+            });
+        });
+        
+        return openLink;
+    }
+    
+    function opportunityConfig(account) {
+        var config = {
+            title:  account.record.Name + " - Opportunities",
+            img: "/img/icon/reports24.png",
+            actions: {
+                listAction: function(data) { 
+                    return listOpportunities(account);
+                },
+                updateAction: function(postData) {
+                    return upsert(new SObjectModel.opp(getFields(postData)), getOpportunityObject);  
+                },
+                createAction: function(postData) {
+                    return upsert(new SObjectModel.opp(getFields(postData)), getOpportunityObject);  
+                }
+                
+            },
+            fields: {
+                AccountId: {
+                    type: "hidden",
+                    defaultValue: account.record.Id
+                },
+                Id: {
+                    key: true,
+                    create: false,
+                    edit: false,
+                    list: false
+                },
+                Name: {
+                    title: "Name",
+                    width: "30%"
+                },
+                Amount: {
+                    title: "Amount",
+                    display: function(data) {
+                        if (data.record.Amount) {
+                            return data.record.Amount.toLocaleString();
+                        }
+                        return "-";
+                    }
+                },
+                StageName: {
+                    title: "Stage",
+                    type: "text"
+                },
+                Probability: {
+                    title: "Probability",
+                    type: "text",
+                    display: function(data) {
+                        return data.record.Probability + "%"
+                    }
+                },
+                CloseDate: {
+                    title: "Close Date",
+                    type: "date",
+                    display: function(data) {
+                        return new Date(data.record.CloseDate).toDateString();
+                    }
+                }
+            }
+        };
+        
+        function listOpportunities(account) {
+            return retrieve(new SObjectModel.opp(), getOpportunityObject, { 
+                limit: 100, 
+                where: { AccountId: { eq: account.record.Id } } 
+            });
+        }
+            
+        function getOpportunityObject(record) {
+            return {
+                Id : record.get("Id"),
+                Name : record.get("Name"),
+                AccountId : record.get("AccountId"),
+                Amount : record.get("Amount"),
+                StageName : record.get("StageName"),
+                Probability : record.get("Probability"),
+                CloseDate : record.get("CloseDate")
+            };
+        }
+        
+        return config;
+    }
+    
+    function contactConfig(account) {
+        var config = {
+            title:  account.record.Name + " - Contacts",
+            img: "/img/icon/people24.png",
+            actions: {
+                listAction: function(data) { 
+                    return listContacts(account);
+                },
+                createAction: function(postData) {
+                    return upsert(new SObjectModel.con(getFields(postData)), getContactObject);  
+                },
+                updateAction: function(postData) {
+                    return upsert(new SObjectModel.con(getFields(postData)), getContactObject);  
+                }
+            },
+            fields: {
+                AccountId: {
+                    type: "hidden",
+                    defaultValue: account.record.Id
+                },
+                Id: {
+                    key: true,
+                    create: false,
+                    edit: false,
+                    list: false
+                },
+                FirstName: { title: "First Name" },
+                LastName: { title: "Last Name" },
+                Phone: { title: "Phone" },
+                Email: { title: "Email" }
+            }
+        };
+        
+        function listContacts(account) {
+            return retrieve(new SObjectModel.con(), getContactObject, { 
+                limit: 20, 
+                where: { AccountId: { eq: account.record.Id } }
+            });
+        }
+        
+        function getContactObject(record) {
+            return {
+                Id : record.get("Id"),
+                FirstName : record.get("FirstName"),
+                LastName : record.get("LastName"),
+                Phone: record.get("Phone"),
+                Email: record.get("Email")
+            };
+        }
+    
+        return config;
+    }
+    
+    function retrieve(modelVar, objectConverterFunc, config) {
+        return $j.Deferred(function (dfd) {
+            modelVar.retrieve(config,
+                function(err, records, event) {
+                    if (err) {
+                        handleErr(dfd, err);
+                    } else {
+                        // construct the result in the jTable expected format
+                        var data = {
+                            Result: "OK",
+                            Records: [],
+                            TotalRecordCount: event.result.TotalRecordCount
+                        };
+                        // add the records to the results
+                        records.forEach(function(record) {
+                            data.Records.push(objectConverterFunc(record));
+                        });
+                        dfd.resolve(data);
+                    }
+                }
+            );
+        });
+    }
+
+    function upsert(modelVar, objectConverterFunc) {
+        return $j.Deferred(function(dfd) { 
+            modelVar.upsert(function(err, result) {
+                if (err) {
+                    handleErr(dfd, err);
+                } else {
+                    var rec = objectConverterFunc(modelVar);
+                    rec.Id = result[0];
+                    dfd.resolve({
+                        Result: "OK",
+                        Record: rec
+                    });
+                }
+            });
+        });
+    }
+    
+    function handleErr(dfd, err) {
+        var data = {
+            Result: "ERROR",
+            Message: err
+        };
+        dfd.resolve(data);
+    }
+    
+    function getFields(postData) {
+       // extract the fields (simple name/values)
+       // from the postData query string
+       var rec = {};
+       var pairs = postData.split("&");
+       var i, pair;
+       for (i = 0; i < pairs.length; i++) {
+           pair = pairs[i].split("=");
+           rec[pair[0]] = decodeURIComponent( pair[1].replace(/\+/g, ' ') );
+       }
+       return rec;
+    }
+});
+</script>
+
+<div id="records"></div>
+
+</apex:page>

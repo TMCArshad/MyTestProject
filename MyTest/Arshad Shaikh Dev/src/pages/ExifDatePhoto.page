@@ -1,0 +1,38 @@
+<apex:page standardController="Document" extensions="documentExt" >
+<apex:includeScript value="{!URLFOR($Resource.ExifJar, '/jquery-1.7.1.js')}" />
+<apex:includeScript value="{!URLFOR($Resource.ExifJar, '/exif.js')}" />
+<script>
+function getGPSdata(e) { 
+    EXIF.getData(e.files[0], function() {
+        document.querySelectorAll('[id$="GPSLatitude"]')[0].value = 
+            EXIF.getTag(this, "GPSLatitude"),
+            console.log(this);
+        document.querySelectorAll('[id$="GPSLongitude"]')[0].value = 
+            EXIF.getTag(this, "GPSLongitude");
+           alert(EXIF.getTag(this, "DateTimeOriginal"));
+           var str = EXIF.getTag(this, "DateTimeOriginal");
+           var str1 = str.split(" ");
+           alert('str1 '+str1 );
+           var str2 = str1[0].split(":")
+           alert('str2 '+str2 );
+           document.querySelectorAll('[id$="dateTime"]')[0].value = str2[2]+'/'+str2[1]+'/'+str2[0]
+          //var dd1 = new Date(str);
+           //alert('dd1'+str);
+         //document.querySelectorAll('[id$="dateTime"]')[0].value = this.lastModifiedDate.getDate()+'/'+(this.lastModifiedDate.getMonth()+1) +'/'+this.lastModifiedDate.getFullYear();
+    });
+} 
+</script>
+<apex:messages />
+<apex:form >
+    <apex:pageBlock >  
+        <apex:pageBlockSection >
+            <apex:inputFile value="{!document.body}" filename="{!document.name}"
+                            onchange="getGPSdata(this)" />
+            <apex:commandButton value="Save" action="{!save}"/>
+            <apex:inputtext value="{!GPSLatitude}" id="GPSLatitude"/>
+            <apex:inputtext value="{!GPSLongitude}" id="GPSLongitude"/>
+            <apex:inputtext value="{!GPSLongitude}" id="dateTime"/>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

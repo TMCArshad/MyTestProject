@@ -1,0 +1,14 @@
+<aura:component >
+    <aura:attribute name="message" type="String"/>
+    
+    <aura:registerEvent name="childComponentClicked" type="c:childComponentClicked"/>
+    <aura:handler name="childComponentClicked" action="{!c.handleChildClick}"/>
+    
+    <div>
+        <button onclick="{!c.childEventFire}">Fire Child event to update both parent and child</button>
+    </div>
+    
+    <div>
+    	<ui:outputText value="{!v.message}"/>
+    </div>
+</aura:component>

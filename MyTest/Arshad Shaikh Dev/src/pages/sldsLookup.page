@@ -1,0 +1,43 @@
+<apex:page sidebar="false" standardstylesheets="false" showheader="false" doctype="html-5.0" standardController="Lead">
+<link rel="stylesheet" href="{!URLFOR($Resource.slds, '/assets/styles/salesforce-lightning-design-system.min.css')}"/>
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="{!URLFOR($Resource.aljs, '/js/aljs-all.min.js')}"></script>
+<script src="{!URLFOR($Resource.aljs, '/js/aljs-datepicker.min.js')}"></script>
+<script src="{!URLFOR($Resource.aljs, '/js/aljs-modal.min.js')}"></script>
+<script src="{!URLFOR($Resource.aljs, '/js/aljs-pill.min.js')}"></script>
+<script src="{!URLFOR($Resource.aljs, '/js/aljs-tooltip.min.js')}"></script>
+<script>
+var assetsLocation = '{!URLFOR($Resource.slds)}';
+</script>
+<script>
+    $.aljsInit({
+        assetsLocation: assetsLocation,
+        scoped: true
+    });
+</script>
+<div class="slds">
+
+<div class="slds-form-element slds-lookup" data-select="multi" data-scope="multi">
+  <label class="slds-form-element__label" for="lookup-01">Parent Account</label>
+  <div class="slds-form-element__control slds-grid slds-box--border">
+    <div class="slds-dropdown-trigger--click slds-align-middle slds-m-left--xx-small slds-shrink-none">
+      <svg aria-hidden="true" class="slds-icon slds-icon-standard-account slds-icon--small">
+        
+      </svg>
+      <button class="slds-button slds-button--icon slds-button-space-left slds-shrink-none">
+        <svg aria-hidden="true" class="slds-button__icon">
+          
+        </svg>
+        <span class="slds-assistive-text">Filter</span>
+      </button>
+    </div>
+    <div class="slds-input-has-icon slds-input-has-icon--right slds-grow">
+      <svg aria-hidden="true" class="slds-input__icon slds-icon-text-default">
+        
+      </svg>
+      <input id="lookup-01" class="slds-lookup__search-input slds-input--bare" value="{!Lead.PartnerAccount}" type="text" aria-autocomplete="list" role="combobox" aria-expanded="true" aria-activedescendant="" placeholder="Search Accounts" />
+    </div>
+  </div>
+</div>
+</div>
+</apex:page>

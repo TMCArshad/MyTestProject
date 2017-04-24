@@ -1,0 +1,68 @@
+<!--*!
+ * @version 1.0
+ *
+ * A simple yet powerful JQuery star rating plugin that allows rendering
+ * fractional star ratings 
+ * 
+ * This pulgin is customized from  JQuery plugins at  http://plugins.krajee.com/star-rating
+ *
+ *-->
+<apex:page sidebar="false" showHeader="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0" controller="RatingDemoCtrl">
+    <html>
+
+    <head>
+        <apex:stylesheet value="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css"/>
+        <link href="{!URLFOR($Resource.StarRatingPlugin, 'StarRatingPlugin/css/star-rating.css')}" media="all" rel="stylesheet" type="text/css" />
+        <script src="{!URLFOR($Resource.StarRatingPlugin, 'StarRatingPlugin/js/jquery.min.js')}"></script>
+        <script src="{!URLFOR($Resource.StarRatingPlugin, 'StarRatingPlugin/js/star-rating.min.js')}" type="text/javascript"></script>
+    </head>
+
+    <body>
+        <div>
+            <br />
+            <br />
+            <h3>
+      <b>This page is a sample page created to demo How to Build Custom
+        Rating Functionality For Any set of record List.We have considered Account records to demonstrate the Concept...</b>
+    </h3>
+        </div>
+        <br />
+        <br />
+        <table class="table">
+            <apex:repeat value="{!lstacc}" var="a">
+                <tr>
+                    <div><b>Account Name:</b>{!a.name}</div>
+                     <div>
+                        <input id="{!a.id}" onchange="rateAsset(event);" value="{!IF(a.Account_Ratings__r.size>0,a.Account_Ratings__r[0].RatingScore__c,0)}" type="number" class="rating" min="0" max="5" step="0.5" data-size="sm" data-show-clear="false" data-show-caption="false" />
+                    </div>
+                    <label class="control-label">Qwerty Asterisk Symbol</label>
+    <input id="input-399a" class="rating" data-symbol="*"/>
+    <label class="control-label">Glyphicon Flag Symbol</label>
+    <input id="input-399a" class="rating" data-symbol="&#xe034" data-default-caption="{rating} flags" data-star-captions="{}"/>
+                    <br/>
+                    <br/>
+                    </tr>
+            </apex:repeat>
+        </table>
+    </body>
+    <script>
+        function rateAsset(event) {
+            var a = event.target.id;
+            $('#' + a).on('rating.change', function(event, value, caption) {
+                RatingDemoCtrl.rateAsset(a, value, function(result, event) {
+                    if (event.type == 'exception') {
+                        alert(event.message);
+                    } else {
+                        alert('Thank you for rating this Asset');
+                    }
+                }, {
+                    buffer: false,
+                    escape: true,
+                    timeout: 30000
+                });
+            });
+        }
+    </script>
+    
+    </html>
+</apex:page>

@@ -1,0 +1,33 @@
+<apex:page standardController="Account">
+<apex:form >
+<apex:pageBlock title="My First Page Block">
+<apex:pageBlockSection title="My first Page Block section">
+<b> Hello World </b> <br/>
+<h1> This is my first VF Page </h1>
+<br/>
+My name is {!$User.FirstName} {!$User.LastName}.
+<br/>
+<i> I am proud of it. </i>
+</apex:pageBlockSection>
+</apex:pageBlock>
+<apex:pageBlock title="Learning Global Merge Fields">
+My name is <b>{!$User.FirstName} {!$User.LastName}.</b> <br/>
+My profile name is <b>{!$Profile.Name}</b> and Profile ID is <b>{!$Profile.Id} </b>.<br/>
+My Role in the org is <b> {!$UserRole.Name}</b>. <br/>
+My organization name is <b> {!$Organization.Name} </b>
+</apex:pageBlock>
+<apex:pageBlock title="Learning Input Tags">
+<apex:pageBlockSection >
+<apex:inputField value="{!account.Name}"/>
+<apex:inputField value="{!account.Phone}"/>
+<apex:inputField value="{!account.Type}"/>
+<apex:inputField value="{!account.Fax}"/>
+<img src="/img/icon/trophy32.png"/>
+<apex:inputField style="" value="{!account.website}"/>
+
+</apex:pageBlockSection>
+</apex:pageBlock>
+<apex:pageBlock title="Learning Output Tags">
+</apex:pageBlock>
+</apex:form>
+</apex:page>

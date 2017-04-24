@@ -1,0 +1,91 @@
+<aura:component controller="ContactsController"  implements="force:appHostable">
+   <aura:attribute name="contacts" type="List" />
+   <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+   <!-- Use the Apex model and controller to fetch server side data -->
+   <table class="slds-table slds-table--bordered slds-max-medium-table--stacked-horizontal">
+      <thead>
+        <tr class="slds-text-heading--label">
+            <th class="slds-is-sortable" scope="col">
+                <div class="slds-truncate">Id
+                    <button class="slds-button slds-button--icon-bare">
+                        <c:svg ariaHidden="true" class="slds-button__icon slds-button__icon--small">
+              
+            			</c:svg>
+                        <span class="slds-assistive-text">Sort</span>
+                    </button>
+                </div>
+            </th>
+           <th class="slds-is-sortable" scope="col"><div class="slds-truncate">Name
+          <button class="slds-button slds-button--icon-bare">
+              <c:svg ariaHidden="true" class="slds-button__icon slds-button__icon--small">
+              
+            			</c:svg>
+            <span class="slds-assistive-text">Sort</span>
+          </button>
+        </div></th>
+           <th class="slds-is-sortable" scope="col"><div class="slds-truncate">Phone
+          <button class="slds-button slds-button--icon-bare">
+              <c:svg ariaHidden="true" class="slds-button__icon slds-button__icon--small">
+              
+            			</c:svg>
+            <span class="slds-assistive-text">Sort</span>
+          </button>
+        </div></th>
+           <th class="slds-is-sortable" scope="col"><div class="slds-truncate">Maling Street
+          <button class="slds-button slds-button--icon-bare">
+              <c:svg ariaHidden="true" class="slds-button__icon slds-button__icon--small">
+              
+            			</c:svg>
+            <span class="slds-assistive-text">Sort</span>
+          </button>
+        </div></th>
+           <th class="slds-is-sortable" scope="col"><div class="slds-truncate">Mailing City
+          <button class="slds-button slds-button--icon-bare">
+              <c:svg ariaHidden="true" class="slds-button__icon slds-button__icon--small">
+              
+            			</c:svg>
+            <span class="slds-assistive-text">Sort</span>
+          </button>
+        </div></th>
+           <th class="slds-is-sortable" scope="col"><div class="slds-truncate">Mailing State
+          <button class="slds-button slds-button--icon-bare">
+              <c:svg ariaHidden="true" class="slds-button__icon slds-button__icon--small">
+              
+            			</c:svg>
+            <span class="slds-assistive-text">Sort</span>
+          </button>
+        </div></th>
+           <th class="slds-is-sortable" scope="col"><div class="slds-truncate">Mailing Postal Code
+          <button class="slds-button slds-button--icon-bare">
+              <c:svg ariaHidden="true" class="slds-button__icon slds-button__icon--small">
+              
+            			</c:svg>
+            <span class="slds-assistive-text">Sort</span>
+          </button>
+        </div></th>  
+        </tr>
+      </thead>
+      <tbody>
+        <aura:iteration items="{!v.contacts}" var="contact">
+         <tr>
+           <td class="slds-truncate" scope="row" data-label="Id">{!contact.Id}</td>
+           <td class="slds-truncate" scope="row" data-label="Name">{!contact.Name}</td>                 
+           <td class="slds-truncate" scope="row" data-label="Phone">{!contact.Phone}</td>
+           <td class="slds-truncate" scope="row" data-label="MailingStreet">{!contact.MailingStreet}</td>                 
+           <td class="slds-truncate" scope="row" data-label="MailingCity">{!contact.MailingCity}</td>
+           <td class="slds-truncate" scope="row" data-label="MailingState">{!contact.MailingState}</td>
+           <td class="slds-truncate" scope="row" data-label="MailingPostalCode">{!contact.MailingPostalCode}</td>
+           <td class="slds-truncate" scope="row" data-label="ACTIONS">
+                <c:button class="slds-button slds-button--neutral"
+                 label="Details"
+                 svgXlinkHref="/resource/SLDS100/assets/icons/standard-sprite/svg/symbols.svg#account"
+                 svgClass="slds-icon slds-icon-text-default"
+                 onclick="{!c.showDetails}"
+                 data="{!contact.Id}"
+              />
+           </td>
+         </tr>
+        </aura:iteration>
+      </tbody>
+   </table>
+</aura:component>

@@ -1,0 +1,249 @@
+<apex:page standardController="Account" extensions="RemotingAccountDemo">
+
+
+<style>
+#errPhone {
+	color: red;
+}
+#errAllFields {
+	color: red;
+} 
+#errMail {
+	color: red;
+}
+</style> 
+<script type="text/javascript">
+ 
+//Method to update information on the Account bound to the page by the standardController
+//Sends parameters: Account Id, Description, Website, and Phone to the controller    
+	function validateFrm() {
+		var test = $('[id$="website"]').val();
+		alert('Validating Email'+test);
+		flash[:error] = "<div class='error'>Invalid Email Id.</div>"
+	    div.innerHTML += (isUrlValid(test) ? " <span class='valid'>valid</span>:" : $(".error").fadeOut(2000););
+	    return false;
+	}
+    function submitForm() {
+      var rating = $('[id$="rating"]').val();
+      var nameText = $('[id$="nameText"]').val();
+      var phoneText = $('[id$="phoneText"]').val();
+      var parentAcc = $('[id$="parentAcc"]').val();
+      var fax = $('[id$="fax"]').val();
+      var accountNumber = $('[id$="accountNumber"]').val();
+      var website = $('[id$="website"]').val();
+      var site = $('[id$="site"]').val();
+      var tickerSymbol = $('[id$="tickerSymbol"]').val();
+      var type = $('[id$="type"]').val();
+      var ownership = $('[id$="ownership"]').val();
+      var industry = $('[id$="industry"]').val();
+      var numberOfEmployees = $('[id$="numberOfEmployees"]').val();
+      var annualRevenue = $('[id$="annualRevenue"]').val();
+      var sic = $('[id$="sic"]').val();
+      alert("**************all values taken=="+rating+"==Rating=="+nameText+"==NameText");
+      
+      
+      if (!rating.trim() || !nameText.trim() ||  !phoneText.trim() || !parentAcc.trim() || !fax.trim() || !accountNumber.trim() ||  
+			!website.trim() ||  !site.trim() || !tickerSymbol.trim() || !type.trim() || !ownership.trim() ||  !industry.trim() ||  
+			!numberOfEmployees.trim() ||  !annualRevenue.trim() ||  !sic.trim()){
+      	$("#errAllFields").html("One or More fields are empty!!!").show().fadeOut(6000);
+      	return false;
+      }
+      else {
+      RemotingAccountDemo.doInsertAccount(rating, nameText, phoneText, parentAcc, fax, accountNumber, website, site, 
+		 tickerSymbol, type, ownership, industry, numberOfEmployees, annualRevenue, sic , 
+        function(result, event) {
+          if(event.type === 'exception') {
+            console.log("exception");
+            console.log(event);
+          } else if (event.status) { 
+            console.log(result);
+            if(result == 'Success') {
+           	  alert("Filled Account Success"+result);
+            } else {
+              alert(result);
+            }
+          } else {
+            console.log(event.message);
+          }
+        }
+      );
+      return true;
+      }
+    }
+     
+  </script> 
+<apex:form id="accountForm">
+
+<button onclick="return submitForm()">Save</button> <br/>
+<button onclick="return validateFrm()">Validate</button> <br/>
+ <apex:pageMessages id="showmsg"></apex:pageMessages>
+ <span align="center" id="errPhone"></span>
+ <span id="errAllFields"></span>
+ <label id="nameText-error"  for="nameText"></label>
+	<apex:pageBlock title="Account Edit">
+		<apex:pageBlockSection title="Account Information">
+			<apex:outputtext value="{!Account.Owner}"/>
+			<apex:inputField value="{!Account.Rating}" id="rating"/>
+		 	 
+			<apex:inputField value="{!Account.Name}" id="nameText"/>
+			<apex:inputField value="{!Account.Phone}" id="phoneText"/>
+						 
+			<apex:inputField value="{!Account.ParentId }" id="parentAcc"/>
+			<apex:inputField value="{!Account.Fax}" id="fax"/> 
+			
+			<apex:inputField value="{!Account.AccountNumber}" id="accountNumber"/>
+			<apex:inputField value="{!Account.Website}" id="website"/>
+			
+			<apex:inputField value="{!Account.Site}" id="site"/>
+			<apex:inputField value="{!Account.TickerSymbol}" id="tickerSymbol"/>
+			
+			<apex:inputField value="{!Account.Type}" id="type"/>
+			<apex:inputField value="{!Account.Ownership}" id="ownership"/>
+			
+			<apex:inputField value="{!Account.Industry}" id="industry"/>
+			<apex:inputField value="{!Account.NumberOfEmployees}" id="numberOfEmployees"/>
+			
+			<apex:inputField value="{!Account.AnnualRevenue}" id="annualRevenue"/>
+			<apex:inputField value="{!Account.Sic}" id="sic"/>
+			
+		</apex:pageBlockSection>
+		<apex:pageBlockSection title="Address Information">
+			<apex:inputField value="{!Account.BillingStreet}"/>
+			<apex:inputField value="{!Account.ShippingStreet}"/>
+			
+			<apex:inputField value="{!Account.BillingCity}"/>
+			<apex:inputField value="{!Account.ShippingCity}"/>
+			
+			<apex:inputField value="{!Account.BillingState}"/>
+			<apex:inputField value="{!Account.ShippingState}"/>
+			
+			<apex:inputField value="{!Account.BillingPostalCode}"/>
+			<apex:inputField value="{!Account.ShippingPostalCode}"/>
+			
+			<apex:inputField value="{!Account.BillingCountry}"/>
+			<apex:inputField value="{!Account.ShippingCountry}"/>
+		</apex:pageBlockSection>
+		<apex:pageBlockSection title="Account">
+			<apex:inputtext value="{!Account.Name}"/>
+		</apex:pageBlockSection>
+		<apex:pageBlockButtons >
+			
+			<apex:commandButton action="{!Cancel}" value="Cancel"/>
+		</apex:pageBlockButtons>
+		
+	</apex:pageBlock>
+	
+</apex:form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js" type="text/javascript"></script>
+<!-- <apex:includeScript value="{!URLFOR($Resource.validationJquery, '/Validation/jquery.validate.js')}"  />
+ -->
+<!--   <script type="text/javascript"> 
+        $(document).ready(function() {
+              
+            $('[id$=accountForm]').validate();             
+              
+            $('[id$=nameText]').rules("add",{
+                required: true,
+                minlength: 5
+            });     
+            
+            $('[id$=phoneText]').rules("add",{
+                required: true,
+				number: true,
+				maxlength: 10,
+				minlength: 10 
+            });
+            
+            $('[id$=fax]').rules("add",{
+                required: true,
+                email: true 
+            });      
+             
+            $('[id$=website]').rules("add",{
+            	required: true,
+                url: true
+            });
+             
+            
+            /* Customised the messages */
+            jQuery.validator.messages.required = "You better have entered a value.. or else!"; 
+            jQuery.validator.messages.email = "Please Enter Valid Email!"; 
+            jQuery.validator.messages.url = "Please Enter Valid URL!"; 
+            jQuery.validator.messages.equalTo = "No silly, you're supposed to type the same set of characters AGAIN.";    
+            jQuery.validator.messages.maxlength = "Max Length is 10 !"; 
+            jQuery.validator.messages.minlength = "Min length is 10 !";   
+        });
+         
+    </script> -->   
+<!--  <script type="text/javascript">
+$(document).ready(function() {
+	function validateForm() {
+	alert('Start of jQuery');	
+		$('[id$="accountForm"]').validate({
+
+			rules: {
+				
+				nameText: {
+					required: true,
+					lettersonly: true 
+				},
+				website: {
+					required: true,
+					email: true
+				},
+				phoneText: {
+					required: true,
+					number: true,
+					maxlength: 10,
+					minlength: 10 
+				},
+				
+			},
+			messages: {
+				nameText: {
+				required: "Please enter your name ",
+				},
+				website: {
+					required: "Please enter email",
+				},
+				phoneText: {
+					required: "Please enter your mobile no",
+				},
+			}
+		});
+		alert('End of jQuery');
+	}
+});
+</script> -->
+<script type="text/javascript">
+$(document).ready(function() {
+
+function isUrlValid(url) {
+    return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
+}
+    
+});
+<!--
+
+//-->
+</script>
+ <script> 
+$(document).ready(function() {
+  $('[id$="phoneText"]').keypress(function (e) {     
+     var phone= parseInt($('[id$="phoneText"]').val().length);    
+     //if the letter is not digit then display error and don't type anything
+     if( phone > 10){
+     	$("#errPhone").html("Phone limit 10!!").show().fadeOut(8000);
+     	return false
+     }     
+     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        //display error message
+        $("#errPhone").html("Digits Only!!").show().fadeOut(8000);
+        return false;
+    }    
+   });   
+});
+ </script> 
+</apex:page>

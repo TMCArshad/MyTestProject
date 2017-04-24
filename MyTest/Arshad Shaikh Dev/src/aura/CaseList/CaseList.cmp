@@ -1,0 +1,42 @@
+<aura:component controller="CaseListAuraController">
+    <aura:attribute name="accountId" type="String"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="slds-card slds-card--empty">
+        <div class="slds-card__header slds-grid grid--flex-spread">
+            <h2 class="slds-text-heading--small slds-truncate">Cases</h2>
+        </div>
+        <div class="slds-card__body">
+            <aura:renderIf isTrue="{!v.cases.length > 0}">
+                <table class="slds-table slds-table--bordered ">
+                    <thead>
+                        <tr class="slds-text-heading--label">
+                            <th scope="col">
+                                <span class="slds-truncate">Contact Name</span>
+                            </th>
+                            <th scope="col">
+                                <span class="slds-truncate">Subject</span>
+                            </th>
+                            <th scope="col">
+                                <span class="slds-truncate">Created Date</span>
+                            </th>
+                            <th scope="col">
+                                <span class="slds-truncate">Status</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.cases}" var="case" indexVar="index">
+                            <c:CaseCard case="{!case}"/>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </aura:renderIf>
+			
+            <button class="slds-button slds-button--brand" style="margin-top: 8px;" onclick="{!c.navigateToAccounts}">Back</button>
+            
+        </div>
+    </div>
+    
+</aura:component>

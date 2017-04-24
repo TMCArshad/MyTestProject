@@ -1,0 +1,198 @@
+<apex:page standardController="Case">
+<apex:form >
+<apex:inputhidden value="{!Case.Account.BillingCity}" />
+<apex:inputhidden value="{!Case.Account.BillingState}" />
+<apex:inputhidden value="{!Case.Account.BillingPostalCode}" />
+<apex:inputhidden value="{!Case.Account.ShippingState}" />
+<apex:inputhidden value="{!Case.Account.ShippingCity}" />
+<apex:inputhidden value="{!Case.Account.ShippingPostalCode}" />
+</apex:form>
+<head>
+<!-- 
+<apex:includeScript value="{!URLFOR($Resource.jQuery, '/jquery/js/jquery-1.9.1.min.js')}" />
+<apex:includeScript value="{!URLFOR($Resource.jQuery, '/jquery/js/jquery-ui-1.10.1.custom.min.js')}" />
+
+<apex:stylesheet value="{!URLFOR($Resource.jQuery, '/jquery/css/ui-lightness/jquery-ui-1.10.1.custom.css')}" />
+-->
+<script type="text/javascript">
+    var j$ = jQuery.noConflict();
+    j$(document).ready(function(){
+        j$("#datepicker").datepicker({
+            dateFormat: 'yymmdd',
+            changeMonth: true,
+            changeYear: true});
+        });
+</script>
+     
+<script type="text/javascript">
+var interval;
+var datepickerdate = new Date();
+var today = new Date();
+var datestatus;
+var tendaysfromnow=new Date().setDate(today.getDate()+9);
+var datesarray = [0,0,0,0,0,0,0];
+var datestatusarray = [0,0,0,0,0,0,0];
+var weatherarray = [0,0,0,0,0,0,0];
+var i=0
+function appendScript()
+{
+
+datepickerdate.setFullYear(datepicker.value.substring(0,4),datepicker.value.substring(4,6)-1, datepicker.value.substring(6,8));
+
+datesarray[0] = new Date(datepickerdate.getFullYear(),datepickerdate.getMonth(),datepickerdate.getDate()-3)
+datesarray[1] = new Date(datepickerdate.getFullYear(),datepickerdate.getMonth(),datepickerdate.getDate()-2)
+datesarray[2] = new Date(datepickerdate.getFullYear(),datepickerdate.getMonth(),datepickerdate.getDate()-1)
+datesarray[3] = new Date(datepickerdate.getFullYear(),datepickerdate.getMonth(),datepickerdate.getDate())
+datesarray[4] = new Date(datepickerdate.getFullYear(),datepickerdate.getMonth(),datepickerdate.getDate()+1)
+datesarray[5] = new Date(datepickerdate.getFullYear(),datepickerdate.getMonth(),datepickerdate.getDate()+2)
+datesarray[6] = new Date(datepickerdate.getFullYear(),datepickerdate.getMonth(),datepickerdate.getDate()+3)
+
+document.getElementById("3daysbeforedatepickerdate").innerHTML = datesarray[0].toString().substr(0,15);
+document.getElementById("2daysbeforedatepickerdate").innerHTML = datesarray[1].toString().substr(0,15);
+document.getElementById("1daysbeforedatepickerdate").innerHTML = datesarray[2].toString().substr(0,15);
+document.getElementById("0daysbeforedatepickerdate").innerHTML = datesarray[3].toString().substr(0,15);
+document.getElementById("1daysafterdatepickerdate").innerHTML = datesarray[4].toString().substr(0,15);
+document.getElementById("2daysafterdatepickerdate").innerHTML = datesarray[5].toString().substr(0,15);
+document.getElementById("3daysafterdatepickerdate").innerHTML = datesarray[6].toString().substr(0,15);
+
+for (var i= 0; i< 7; i++) {
+
+if (datesarray[i]>=tendaysfromnow)
+{
+//throw a "no data"/unknown image from http://icons-ak.wxug.com/i/c/k/unknown.gif
+//datestatusarray[i]="future (>10 days, no data)";
+thedate = datesarray[i].format('yyyymmdd')
+            var weatherdiv="weather"+i+"Div";
+            //alert(i);
+            document.getElementById(weatherdiv).innerHTML = '<img src="http://icons-ak.wxug.com/i/c/k/unknown.gif">';
+}
+else if ((datesarray[i]>today)&&(datesarray[i]<tendaysfromnow))
+{
+//get forecast data for days +1 through +9
+datestatusarray[i]="future (within 10 days)";
+thedate = datesarray[i].format('yyyymmdd')
+            j$.ajax({
+            url : "https://api.wunderground.com/api/e813b22c1c9a70bf/forecast10day/q/{!IF((NOT(ISBLANK(Case.Account.ShippingPostalCode))),(LEFT(Case.Account.ShippingPostalCode,5) & ".json"),IF(AND(NOT(ISBLANK(Case.Account.ShippingState)),NOT(ISBLANK(Case.Account.ShippingCity))),Case.Account.ShippingState&"/"&SUBSTITUTE(Case.Account.ShippingCity, " ", "_")&".json",IF((NOT(ISBLANK(Case.Account.BillingPostalCode))),(LEFT(Case.Account.BillingPostalCode,5) & ".json"),IF((NOT(ISBLANK(Case.Account.BillingState)) && NOT(ISBLANK(Case.Account.BillingCity))),Case.Account.BillingState&"/"&SUBSTITUTE(Case.Account.BillingCity, " ", "_")&".json","unknown.json"))))}",
+            dataType : "jsonp",
+            ajaxI:i,
+            success : function(parsed_json) {
+            i=this.ajaxI
+            var weather= parsed_json['forecast']['txt_forecast']['forecastday'][0]['icon'];
+            var weatherdiv="weather"+i+"Div";
+            document.getElementById(weatherdiv).innerHTML = '<img src="http://icons-ak.wxug.com/i/c/k/'+weather+'.gif">';
+            }});
+}
+else if (datesarray[i].getDate()==today.getDate()&&datesarray[i].getMonth()==today.getMonth()&&datesarray[i].getYear()==today.getYear())
+{
+//get current conditions
+datestatusarray[i]="today";
+thedate = datesarray[i].format('yyyymmdd')
+            j$.ajax({
+            url : "https://api.wunderground.com/api/YOUR_API_KEY/geolookup/conditions/q/{!IF((NOT(ISBLANK(Case.Account.ShippingPostalCode))),(LEFT(Case.Account.ShippingPostalCode,5) & ".json"),IF(AND(NOT(ISBLANK(Case.Account.ShippingState)),NOT(ISBLANK(Case.Account.ShippingCity))),Case.Account.ShippingState&"/"&SUBSTITUTE(Case.Account.ShippingCity, " ", "_")&".json",IF((NOT(ISBLANK(Case.Account.BillingPostalCode))),(LEFT(Case.Account.BillingPostalCode,5) & ".json"),IF((NOT(ISBLANK(Case.Account.BillingState)) && NOT(ISBLANK(Case.Account.BillingCity))),Case.Account.BillingState&"/"&SUBSTITUTE(Case.Account.BillingCity, " ", "_")&".json","unknown.json"))))}",
+            dataType : "jsonp",
+            ajaxI:i,
+            success : function(parsed_json) {
+            i=this.ajaxI
+            var weather= parsed_json['current_observation']['icon'];;
+            var weatherdiv="weather"+i+"Div";
+            var location = parsed_json['location']['city'];
+            var temp_f = parsed_json['current_observation']['temp_f'];
+            var currcond = parsed_json['current_observation']['weather'];
+            document.getElementById(weatherdiv).innerHTML = '<img src="http://icons-ak.wxug.com/i/c/k/'+weather+'.gif">';
+            document.getElementById("currcond").innerHTML = "Current temperature " + temp_f +  "\u00B0F" + "<br/>Current conditions: " + currcond + "<br/>Based on: {!IF((NOT(ISBLANK(Case.Account.ShippingPostalCode))),"Shipping ZIP",IF(AND(NOT(ISBLANK(Case.Account.ShippingState)),NOT(ISBLANK(Case.Account.ShippingCity))),"Shipping City/State",IF((NOT(ISBLANK(Case.Account.BillingPostalCode))),"Billing ZIP",IF((NOT(ISBLANK(Case.Account.BillingState)) && NOT(ISBLANK(Case.Account.BillingCity))),"Billing City/State","Unknown Location"))))}";
+            }});
+}
+else
+{
+//get historical data
+//find a way to make all the history calls be 1 call
+datestatusarray[i]="past";
+thedate = datesarray[i].format('yyyymmdd')
+            j$.ajax({
+            url : "https://api.wunderground.com/api/YOUR_API_KEY/history_"+thedate+"/q/{!IF((NOT(ISBLANK(Case.Account.ShippingPostalCode))),(LEFT(Case.Account.ShippingPostalCode,5) & ".json"),IF(AND(NOT(ISBLANK(Case.Account.ShippingState)),NOT(ISBLANK(Case.Account.ShippingCity))),Case.Account.ShippingState&"/"&SUBSTITUTE(Case.Account.ShippingCity, " ", "_")&".json",IF((NOT(ISBLANK(Case.Account.BillingPostalCode))),(LEFT(Case.Account.BillingPostalCode,5) & ".json"),IF((NOT(ISBLANK(Case.Account.BillingState)) && NOT(ISBLANK(Case.Account.BillingCity))),Case.Account.BillingState&"/"&SUBSTITUTE(Case.Account.BillingCity, " ", "_")&".json","unknown.json"))))}",
+            dataType : "jsonp",
+            ajaxI:i,
+            success : function(parsed_json) {
+            i=this.ajaxI
+            var weather= parsed_json['history']['observations'][0]['icon'];
+            var weatherdiv="weather"+i+"Div";
+            document.getElementById(weatherdiv).innerHTML = '<img src="http://icons-ak.wxug.com/i/c/k/'+weather+'.gif">';
+            }});
+
+}
+}
+
+
+//document.getElementById('weatherbutton').disabled = true;
+//alert('{!IF((NOT(ISBLANK(Case.Account.ShippingPostalCode))),(LEFT(Case.Account.ShippingPostalCode,5) & ".json"),IF(AND(NOT(ISBLANK(Case.Account.ShippingState)),NOT(ISBLANK(Case.Account.ShippingCity))),Case.Account.ShippingState&"/"&SUBSTITUTE(Case.Account.ShippingCity, " ", "_")&".json",IF((NOT(ISBLANK(Case.Account.BillingPostalCode))),(LEFT(Case.Account.BillingPostalCode,5) & ".json"),IF((NOT(ISBLANK(Case.Account.BillingState)) && NOT(ISBLANK(Case.Account.BillingCity))),Case.Account.BillingState&"/"&SUBSTITUTE(Case.Account.BillingCity, " ", "_")&".json","unknown.json"))))}')
+}
+
+</script>
+</head>
+
+<body>
+
+<div style="text-align:center;">
+Date: <input type="text" id="datepicker" value="{!TEXT(YEAR(TODAY()))}{!LPAD(TEXT(MONTH(TODAY())), 2, "0")}{!LPAD(TEXT(DAY(TODAY())), 2, "0")}" />
+</div>
+
+<div style="text-align:center;">
+<button id="weatherbutton2" align="center" onclick="appendScript()">Get Weather From Datepicker</button>
+</div>
+
+<br/>
+<table align="center" border = '1px'>
+<tr>
+<td>
+</td>
+<td>
+<div id="3daysbeforedatepickerdate"/>
+</td>
+<td>
+<div id="2daysbeforedatepickerdate"/>
+</td>
+<td>
+<div id="1daysbeforedatepickerdate"/>
+</td>
+<td>
+<div id="0daysbeforedatepickerdate"/>
+</td>
+<td>
+<div id="1daysafterdatepickerdate"/>
+</td>
+<td>
+<div id="2daysafterdatepickerdate"/>
+</td>
+<td>
+<div id="3daysafterdatepickerdate"/>
+</td>
+</tr>
+<tr>
+<td>
+<div id="currcond"></div>
+</td>
+<td align="center">
+<div id="weather0Div"></div>
+</td>
+<td align="center">
+<div id="weather1Div"></div>
+</td>
+<td align="center">
+<div id="weather2Div"></div>
+</td>
+<td align="center">
+<div id="weather3Div"></div>
+</td>
+<td align="center">
+<div id="weather4Div"></div>
+</td>
+<td align="center">
+<div id="weather5Div"></div>
+</td>
+<td align="center">
+<div id="weather6Div"></div>
+</td>
+</tr>
+</table>
+</body>
+</apex:page>

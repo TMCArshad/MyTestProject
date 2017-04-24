@@ -1,0 +1,64 @@
+<apex:page title="Date Picker Demo 1" controller="DatePickerDemo1Controller" sidebar="false">
+ 
+    <head>
+        <apex:stylesheet value="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"  />
+        <apex:includeScript value="https://code.jquery.com/jquery-1.9.1.js" />
+        <apex:includeScript value="https://code.jquery.com/ui/1.10.3/jquery-ui.js" />
+    </head>
+ 
+    <body>
+        <script type="text/javascript">
+ 
+            j$ = jQuery.noConflict();
+ 
+            j$(document).ready(function() {
+                j$( "#event_start_date" ).datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    changeYear: true,
+                    numberOfMonths: 1,
+                    dateFormat:"dd-mm-yy",
+                    altField: "#event_start_date_alternate",
+                    altFormat: "dd-mm-yy",
+                    showAnim: "slide"
+                })
+            });
+ 
+            function buildSOQLQuery() {
+ 
+                queryBuilder(
+                    j$("#name").val(),
+                    j$("#event_start_date_alternate").val()  //we need to pass the alternate field because it has the right date format
+                );
+            }
+ 
+            function clearQuery() {
+ 
+                j$("#name").val('');
+                j$("#event_start_date").val('');
+                j$("#event_start_date_alternate").val('');
+ 
+                //Reset to the default query
+                buildSOQLQuery();
+            }
+ 
+        </script>
+ 
+        <apex:form >
+            <apex:pageMessages id="errors" />
+            <apex:pageBlock title="Date Picker Demo 1" mode="edit">
+  
+ 
+                               
+                                            <label for="event_start_date">Event Start Date (on/after)</label>
+                                        
+                                        <input type="s" style="width:0px;margin-right: -9px;" id="name" />
+                                            <input  type="text" name="event_start_date" id="event_start_date" />
+                                        
+            </apex:pageBlock>
+ 
+        </apex:form>
+ 
+    </body>
+ 
+</apex:page>

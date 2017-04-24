@@ -1,0 +1,28 @@
+<aura:component >
+    <aura:attribute name="acc" type="Account"/>
+    <aura:registerEvent name="accountSelect" type="c:accountSelectionEvent"/>
+    
+    <tr>
+        <td class="slds-truncate">
+            <span aura:id="svg_content1">
+                <![CDATA[
+                	<svg aria-hidden="true" class="slds-icon slds-icon--large slds-icon-text-default">
+                    	<use xlink:href="/resource/SLDS092/assets/icons/standard-sprite/svg/symbols.svg#account""></use>
+                    </svg>
+            	]]>
+            </span>
+            <ui:outputText value="{!v.acc.Name}"/>
+        </td>
+        
+        <td class="slds-truncate">
+            <ui:outputText value="{!v.acc.Description}"/>
+        </td>
+        
+        <td>
+            <a onclick="{!c.accountSelected}">
+                <p>Show Cases</p>
+            </a>
+        </td>
+    </tr>
+    
+</aura:component>

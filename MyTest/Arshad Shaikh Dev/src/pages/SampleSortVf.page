@@ -1,0 +1,79 @@
+<apex:page controller="SampleSort" showHeader="false" sidebar="false"> 
+
+    <!-- CSS added to display alternate row colors and Center align Text in PageblockTable -->
+    <!--<style type="text/css">
+        .oddrow{background-color: #00FFFF; } 
+        .evenrow{background-color: #7FFFD4; } 
+        .textalign{text-align:center; } 
+    </style>
+
+    --><apex:form id="form">
+        <!-- Tabstyle attribute is used to assign the color scheme to the pageblock.Here Contact Object color scheme is used for the pageblock-->
+        <apex:pageBlock id="pgblock" tabStyle="Contact">
+            <apex:pageBlockSection title="Contact Details -  Page #{!pageNumber}" columns="1" collapsible="false">   
+                <!-- Rowclasses attribute is used to define different CSS classes for different rows. 
+                     Rules attribute is used: borders drawn between cells in the page block table.
+                     Title attribute will be used as a help text when a user hovers mouse over the Page Block table.
+                     Styleclass, HeaderClass attributes are used to Center align Table Text in Page Block table --->
+                <apex:pageBlockTable value="{!ContactList}" var="ContList" rowClasses="oddrow,evenrow"   rules="groups"  title="Click Column Header for Sorting"  styleclass="textalign" headerClass="textalign" >
+                   
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink value="Salutation" action="{!toggleSort}" rerender="pgblock">
+                                <apex:param name="sortField" value="Salutation" assignTo="{!sortField}"/>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputField value="{!ContList.Salutation}"/>
+                    </apex:column>
+                    
+                    <apex:column >
+                        <apex:facet name="header">
+                           <apex:commandLink value="Contact ID" action="{!toggleSort}" rerender="pgblock">
+                                <!-- Value attribute should have field (API Name) to sort in asc or desc order -->
+                                <apex:param name="sortField" value="Name" assignTo="{!sortField}"/>
+                           </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputField value="{!ContList.name}"/>
+                    </apex:column> 
+
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink value="Name" action="{!toggleSort}" rerender="pgblock">
+                                <apex:param name="sortField" value="Name" assignTo="{!sortField}"/>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputField value="{!ContList.Name}"/>
+                    </apex:column>
+
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink value="Email" action="{!toggleSort}" rerender="pgblock">
+                                <apex:param name="sortField" value="Email" assignTo="{!sortField}"/>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputField value="{!ContList.Email}"/>
+                    </apex:column>
+
+                    <apex:column >
+                        <apex:facet name="header">
+                            <apex:commandLink value="Phone" action="{!toggleSort}" rerender="pgblock">
+                                <apex:param name="sortField" value="Phone" assignTo="{!sortField}"/>
+                            </apex:commandLink>
+                        </apex:facet>
+                        <apex:outputField value="{!ContList.Phone}"/>
+                    </apex:column>
+
+                    
+                </apex:pageBlockTable>
+            </apex:pageBlockSection>
+
+            <apex:panelGrid columns="4">
+                <apex:commandLink action="{!first}">First</apex:commandlink>
+                <apex:commandLink action="{!previous}" rendered="{!hasPrevious}">Previous</apex:commandlink>
+                <apex:commandLink action="{!next}" rendered="{!hasNext}">Next</apex:commandlink>
+                <apex:commandLink action="{!last}">Last</apex:commandlink>
+            </apex:panelGrid>
+
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

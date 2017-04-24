@@ -1,0 +1,30 @@
+<apex:page controller="wrapperListController">
+<apex:form >
+<apex:pageBlock >
+<apex:commandButton value="Add Row" action="{!addRow}" rerender="table" immediate="true"/>
+<apex:pageBlockSection >
+  <apex:pageBlockTable value="{!wrappers}" var="w" id="table"> 
+     <apex:column headerValue="Identity" rendered="false" >
+        <apex:outputText value="{!w.ident}"/>
+     </apex:column>                              
+    <apex:column headerValue="Override Date">                      
+        <apex:inputField value="{!w.ovr.Name}" required="true" />                          
+    </apex:column>  
+    <apex:column headerValue="Preferred">
+        
+    </apex:column>                        
+    <apex:column headerValue="Override Amount">                    
+        <apex:inputField value="{!w.ovr.Industry}" required="true" styleClass="total" onchange="calcTotal()"  />                           
+    </apex:column>   
+    <apex:column headerValue="Action">
+        <apex:commandButton action="{!delRow}"  image="/img/func_icons/remove12_on.gif" rerender="table" immediate="true">
+            <apex:param name="toDelIdent" value="{!w.ident}" assignTo="{!toDelIdent}"/>
+           
+        </apex:commandButton>
+        
+    </apex:column>                                               
+ </apex:pageBlockTable> 
+ </apex:pageBlockSection> 
+ </apex:pageBlock>
+ </apex:form>
+</apex:page>

@@ -1,0 +1,19 @@
+<apex:page standardController="Account">
+  <h3>Current Weather</h3>
+  <div id="current-weather"></div>
+ 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script>
+    jQuery(document).ready(function($) {
+      $.ajax({
+      url : "https://api.wunderground.com/api/e813b22c1c9a70bf/geolookup/conditions/q/{!Account.BillingState}/{!Account.BillingCity}.json",
+      dataType : "jsonp",
+      success : function(parsed_json) {
+        var location = parsed_json['location']['city'];
+        var temp_f = parsed_json['current_observation']['temp_f'];
+        $("#current-weather").text("Current temperature in " + location + " is " + temp_f);
+      }
+    });
+  });
+  </script>
+</apex:page>

@@ -1,0 +1,5 @@
+<apex:page standardController="Consultant__c">
+  <apex:pageBlock >
+       test page
+  </apex:pageBlock>
+</apex:page>

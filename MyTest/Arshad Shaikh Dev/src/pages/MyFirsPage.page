@@ -1,0 +1,23 @@
+<apex:page controller="cMyFirsPage" docType="html-5.0">
+  <apex:form >
+      <apex:pageBlock title="pageBlock">
+          <apex:pageBlockSection title="pageBlockSection" columns="1">
+              <apex:pageBlockSectionItem >
+              <apex:input type="text" value="{!firstName}" title="firstName"/>
+              <apex:input type="number" value="{!salary}" title="salary"/>
+              </apex:pageBlockSectionItem>
+              <apex:pageBlockSectionItem >
+              <apex:input type="email" value="{!email}" title="email" />
+              <apex:input type="auto" value="{!id}" title="id"/>
+              </apex:pageBlockSectionItem>   
+              <apex:pageBlockSectionItem >
+              <apex:input type="date" value="{!joiningDate}" title="joiningDate"/>
+              <apex:input type="datetime" value="{!jdWithTime}" title="jdWithTime"/>
+              </apex:pageBlockSectionItem>                              
+          </apex:pageBlockSection>
+          <apex:pageBlockButtons location="bottom">
+              <apex:commandButton value="Pass Parameter" action="{!PassPrmToVF}"/>
+          </apex:pageBlockButtons>
+      </apex:pageBlock>
+  </apex:form>
+</apex:page>

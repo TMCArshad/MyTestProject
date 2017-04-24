@@ -1,0 +1,29 @@
+<apex:page standardController="Account">    
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+(function() {
+var j$ = jQuery.noConflict();
+j$(document).ready(function() {
+    j$('input.prerequisite').keyup(function() {
+        console.log('keyup');
+        var empty = false;
+        j$('input.prerequisite').each(function() {
+            if (j$(this).val() == '') empty = true;
+        });
+        if (empty) {
+            j$('input[id*=register]').attr('disabled', 'true').addClass('btnDisabled')
+        } else {
+            j$('input[id*=register]').removeAttr('disabled').removeClass('btnDisabled')
+        }
+    });
+});
+})()
+</script>              
+    <apex:form >
+       FirstName:<br/>
+       <apex:inputField styleClass="prerequisite" value="{!Account.Name}" id="nid"/><br/>
+       LastName:<br/>
+       <apex:inputField styleClass="prerequisite" value="{!Account.Site}" id="fid"/><br/>
+       <apex:commandButton value="REGISTER" action="{!SAVE}" disabled="true" id="register"/>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,44 @@
+<apex:page standardController="Account" extensions="RemotingAccountDemo" id="page">
+ 
+  <script type="text/javascript">
+ 
+//Method to update information on the Account bound to the page by the standardController
+//Sends parameters: Account Id, Description, Website, and Phone to the controller    
+
+    function submitForm() {
+      var descriptionText = document.getElementById('descriptionText').value;
+      var websiteText = document.getElementById('websiteText').value;
+      var phoneText = document.getElementById('phoneText').value;
+      RemotingAccountDemo.doSubmitForm(
+        '{!Account.Id}', descriptionText, websiteText, phoneText, 
+        function(result, event) {
+          if(event.type === 'exception') {
+            console.log("exception");
+            console.log(event);
+          } else if (event.status) { 
+            console.log(result);
+            if(result == 'Success') {
+           	  
+              window.location.reload();
+              alert("Filled Account");
+            } else {
+              alert(result);
+            }
+          } else {
+            console.log(event.message);
+          }
+        }
+      );
+    }
+     
+  </script>
+ 
+  <h2>Javascript Remoting Form Submission Example </h2> <br /> <br />
+ 
+  Enter the updated information for <strong><apex:outputText value="{!Account.Name}" /></strong> <br />
+  Description: <input type="text" value="{!Account.Description}" size="50" id="descriptionText"/> <br />
+  Website URL: <input type="text" value="{!Account.Website}" size="40" id="websiteText"/> <br />
+  Phone Number: <input type="text" value="{!Account.Phone}" size="18" id="phoneText"/> <br />
+  <button onclick="submitForm()">Submit Form</button>
+ 
+</apex:page>

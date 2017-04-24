@@ -1,0 +1,34 @@
+<aura:component controller="AccountListAuraController">
+    <aura:attribute name="accounts" type="Account[]"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="slds-card slds-card--empty">
+        <div class="slds-card__header slds-grid grid--flex-truncate">
+            <h2 class="slds-text-heading--small slds-truncate">Accounts</h2>
+        </div>
+        <div class="slds-card__body">
+            <table class="slds-table slds-table--bordered slds-truncate">
+                <thead>
+                    <tr class="slds-text-heading--label">
+                        <th class="slds-is-sortable" scope="col">
+                            <span class="slds-truncate">Name</span>
+                        </th>
+                        <th scope="col">
+                            <span class="slds-truncate">Description</span>
+                        </th>
+                        <th scope="col">
+                            <span class="slds-truncate">More</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.accounts}" var="acc">
+                        <c:AccountCard acc="{!acc}" />
+                    </aura:iteration>
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    
+</aura:component>

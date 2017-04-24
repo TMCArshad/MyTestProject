@@ -1,0 +1,34 @@
+<apex:page standardController="Account" extensions="myFirstExtCon">
+<apex:form >
+<apex:pageBlock title="Learning Input Tags">
+<apex:pageBlockSection >
+<apex:inputField value="{!account.Name}"/>
+<apex:inputField value="{!account.Phone}"/>
+<apex:inputField value="{!account.Type}"/>
+<apex:inputField value="{!account.Fax}"/>
+<apex:inputField value="{!account.website}"/>
+</apex:pageBlockSection>
+<apex:pageBlockButtons >
+<apex:commandButton action="{!Save}" value="Save It"/>
+<apex:commandButton action="{!Cancel}" value="Cancel It"/>
+</apex:pageBlockButtons>
+</apex:pageBlock>
+<apex:pageBlock title="My first Page Block Table of Contacts">
+<apex:pageBlockTable value="{!account.contacts}" var="con">
+<apex:column value="{!con.Name}"/>
+<apex:column value="{!con.Phone}"/>
+<apex:column value="{!con.title}"/>
+<apex:column value="{!con.email}"/>
+</apex:pageBlockTable>
+</apex:pageBlock>
+<apex:pageBlock title="Learning Output Tags">
+<apex:pageBlockSection >
+<apex:outputField value="{!account.Name}"/>
+<apex:outputField value="{!account.Phone}"/>
+<apex:outputField value="{!account.Type}"/>
+<apex:outputField value="{!account.Fax}"/>
+<apex:outputField value="{!account.website}"/>
+</apex:pageBlockSection>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

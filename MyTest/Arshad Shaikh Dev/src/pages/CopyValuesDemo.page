@@ -1,0 +1,18 @@
+<apex:page standardController="Account" id="accPage">
+    <apex:form id="accform" ><apex:outputText value="myText" id="textField" />
+        <apex:inputField id="accName" label="AB"  onblur="test()" value="{!Account.name}"/>
+        <apex:inputField id="cd" label="CD" value="{!Account.AccountNumber}"/>
+        <apex:inputText id="ef" label="CD" value="{!Account.Parent}"/>
+    </apex:form>
+    
+<script>
+      function test(){      
+      var x = document.getElementById('{!$Component.accPage.accform.accName}');
+      var x2 = document.getElementById('{!$Component.accPage.accform.ef}');
+     
+      x2.value= x.value;
+         
+      }
+     
+    </script>
+</apex:page>

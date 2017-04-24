@@ -1,0 +1,68 @@
+<apex:page sidebar="false" controller="javascriptRemotingDemo" showHeader="false" standardStylesheets="false">
+	<style>
+body {
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+#records {
+	border-collapse: collapse;
+	margin-top: 10px;
+}
+
+#records th, #records td {
+	border: 1px solid #EB99D6;
+	padding: 3px 7px 2px 7px;
+}
+
+#records th {
+	padding-top: 5px;
+	padding-bottom: 4px;
+	background-color: #EB99D6;
+	color: #ffffff;
+}
+
+#records tr:nth-child(odd) {
+	color: #000000;
+	background-color: #F5CCEA;
+}
+</style>
+
+	<script type="text/javascript">
+function getRecordsDetails() {
+ var objName = document.getElementById("objectName").value;
+ Visualforce.remoting.Manager.invokeAction(
+ '{!$RemoteAction.javascriptRemotingDemo.getRecords}',objName,
+ function(result, event) {
+ if (event.status) {
+ var l = result.length;
+ if (l == 0) {
+ document.getElementById("details").innerHTML = 'No Results!';
+ } else {
+ var markup = '<table id="records">';
+ markup += '<tr><th>Sl No</th><th>Make</th><th>Model</th><th>Status</th></tr>';
+ for (var i = 0; i< l; i++) {
+ var recordDetail = '<tr>' + "<td>" + result[i].Name + "</td>" + "<td>" + result[i].AccountNumber + "</td>" + "<td>" + 
+ result[i].ShippingAddress + "</td>" + "<td>" + result[i].Phone + "</td>" + '</tr>';
+ markup += recordDetail;
+ }
+ document.getElementById("details").innerHTML = markup;
+ }
+ } else if (event.type === 'exception') {
+ document.getElementById("details").innerHTML = event.message + "<br/>\n<pre>" + event.where + "</pre>";
+ } else {
+ document.getElementById("details").innerHTML = event.message;
+ }
+ }, 
+ {
+ escape: true
+ });
+}
+</script>
+
+	<h2>Javascript Remoting Demo</h2>
+	<br />
+	<input type="text" id="objectName" placeholder="Enter Name " />
+	<input type="button" value="Get Records" id="btnSearch"
+		onclick="getRecordsDetails();" />
+	<div id="details"></div>
+</apex:page>

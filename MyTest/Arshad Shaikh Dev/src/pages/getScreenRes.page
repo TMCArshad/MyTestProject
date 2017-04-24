@@ -1,0 +1,19 @@
+<apex:page controller="cGetScreenRes">
+  <apex:form >
+      <apex:pageBlock >
+          <script></script>
+          <apex:actionFunction action="{!PassParameter}" name="SetScreenresolution" reRender="PBS1">
+                <apex:param name="P1" value="" assignTo="{!param1}"/>
+                <apex:param name="P2" value="" assignTo="{!param2}"/>
+          </apex:actionFunction>
+          <apex:commandButton value="Refres" onclick="SetScreenresolution(screen.availWidth,screen.height); return false;"/>
+      </apex:pageBlock>
+      <apex:pageBlock title="Parameters">
+          <apex:pageBlockSection id="PBS1">
+              Parameter 1 : {!param1} <br/>
+              Parameter 2 : {!param2} <br/>
+              List : {!ListParam}
+          </apex:pageBlockSection>
+      </apex:pageBlock>
+  </apex:form>
+</apex:page>

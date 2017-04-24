@@ -1,0 +1,11 @@
+<aura:component >
+    <ltng:require styles="/resource/SLDSWin17/assets/styles/salesforce-lightning-design-system-ltng.css" />
+    <div class="TeeOffTech">
+        <div class="slds-grid slds-grid--align-center">
+            <div>Content determines the width unless otherwise set</div>
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>
+        </div>
+    </div>
+</aura:component>

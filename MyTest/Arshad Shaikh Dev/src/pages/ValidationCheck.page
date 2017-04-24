@@ -1,0 +1,27 @@
+<apex:page sidebar="true" standardStylesheets="false" showHeader="false" applyHtmlTag="false" applyBodyTag="false">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+		<apex:stylesheet value="{!URLFOR($Resource.DemoCss, '/css/styles.css')}" />
+		<apex:stylesheet value="{!URLFOR($Resource.DemoCss, '/css/pygment_trac.css')}" />
+ 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		
+		
+		
+	</head>
+	<body>
+		<div class='field' id='email'>
+
+			<h4>Email</h4>
+			<p>	<input type="text" class='email' placeholder="Email" data-formance_algorithm="complex"></input>	</p>
+
+			<h4>Phone Number</h4>
+			<p>	<input type="text" class="phone_number" placeholder="Phone Number"></input>	</p> 
+
+		</div>
+		<!-- <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>  
+		<apex:includeScript	value="{!URLFOR($Resource.DemoJquery, '/js/scale.fix.js')}" />
+		<apex:includeScript	value="{!URLFOR($Resource.DemoJquery, '/js/jquery.formance.min.js')}" />
+		<apex:includeScript	value="{!URLFOR($Resource.DemoJquery, '/js/awesome_form.js')}" /> -->
+	</body>
+</apex:page>

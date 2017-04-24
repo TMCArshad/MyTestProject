@@ -1,0 +1,14 @@
+<apex:page standardController="Training__c">
+<apex:form >
+	<apex:pageblock >
+		<apex:pageBlockSection title="General">
+    		<apex:repeat value="{!$ObjectType.Training__c.FieldSets.Name}" var="field">
+    	     	<apex:inputField value="{!Training__c[field]}" />
+    		</apex:repeat>
+    		<apex:repeat value="{!$ObjectType.Training__c.FieldSets.Time_Period}" var="field">
+    	     	<apex:inputField value="{!Training__c[field]}" />
+    		</apex:repeat>
+		</apex:pageBlockSection>
+	</apex:pageblock>
+</apex:form>
+</apex:page>

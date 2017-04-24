@@ -1,0 +1,49 @@
+<apex:page controller="AttachmentUploadController" id="pg" docType="html-5.0">
+
+    <apex:includeScript value="{!URLFOR($Resource.ExifJar, '/jquery-1.7.1.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.ExifJar, '/exif.js')}" />
+
+    <apex:sectionHeader title="Visualforce Example" subtitle="Attachment Upload Example" />
+
+    <apex:form enctype="multipart/form-data" id="frm">
+        <apex:pageMessages />
+        <apex:pageBlock title="Upload a Attachment" id="pb">
+
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!upload}" value="Save" />
+            </apex:pageBlockButtons>
+
+            <apex:pageBlockSection showHeader="false" columns="2" id="block1">
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="File Name" for="fileName" />
+                    <apex:inputText value="{!attachment.name}" id="fileName" />
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem id="pbi">
+                    <apex:outputLabel value="File" for="file" />
+                    <apex:inputFile value="{!attachment.body}" filename="{!attachment.name}" onChange="imageDetails();" id="file" />
+                </apex:pageBlockSectionItem>
+
+                <apex:pageBlockSectionItem id="pbi2">
+                    <apex:outputLabel value="Description" for="description" />
+                    <apex:inputTextarea value="{!attachment.description}" id="description" />
+                </apex:pageBlockSectionItem>
+
+            </apex:pageBlockSection>
+
+        </apex:pageBlock>
+    </apex:form>
+    <script>
+        document.getElementById('pg:frm:pb:block1:pbi:file').onchange = function(e) {
+            EXIF.getData(e.target.files[0], function() {
+                alert(EXIF.getTag(this, 'GPSLatitude'))
+                alert(EXIF.startOffset(this, 10, 10))
+                alert(EXIF.pretty(this));                
+            });
+        }
+            
+            //document.getElementById('pg:frm:pb:block1:pbi2:description').innerHTML = txt;
+
+    </script>
+</apex:page>

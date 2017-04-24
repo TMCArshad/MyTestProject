@@ -1,0 +1,46 @@
+<apex:page standardController="Hotel__c" extensions="HotelRemoter"	sidebar="false">
+<head>
+  
+  <title>Google Maps Multiple Markers</title>
+  <script src="https://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+</head>
+<body>
+  <div id="map" style="height: 400px; width: 500px;">
+</div>
+<script type="text/javascript">
+    var locations = [];
+    HotelList.getHotelList(function(result,event){
+		console.log(result);
+    	alert('---result---'+result[0].Id);
+		for( i = 0; i < result.length; i++ ) {
+			locations.push(result[i]);
+		}
+		
+	 }); 
+	 
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 10,
+      center: new google.maps.LatLng(-33.92, 151.25),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+    
+    for (i = 0; i < locations.length; i++) { 
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        map: map
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations[i][3]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+    }
+  </script>
+</body>
+</apex:page>

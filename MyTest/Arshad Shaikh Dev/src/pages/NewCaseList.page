@@ -1,0 +1,21 @@
+<apex:page controller="NewCaseListController">
+  <apex:form >
+         <apex:pageBlock title="Case Lists" id="cases_list">
+          
+                <apex:repeat value="{!NewCases}" var="case">
+                     <apex:outputLink id="complink" 
+       onblur="LookupHoverDetail.getHover(this.id).hide();" 
+       onmouseout="LookupHoverDetail.getHover(this.id).hide();" 
+       onfocus="LookupHoverDetail.getHover(this.id, '/{!case.Id}').show();" 
+       onmouseover="LookupHoverDetail.getHover(this.id, '/{!case.Id}').show();"
+       value="/{!case.Id}">
+    <apex:outputText value="{!case.Id}"/>
+</apex:outputLink>
+                <apex:outputField value="{!case.caseNumber}"/>
+                <apex:outputField value="{!case.status}"/>
+                </apex:repeat>    
+                
+          
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,9 @@
+<apex:page controller="cMyFirsPage_prm">
+    <apex:pageBlock >
+    <apex:pageBlockSection >
+        <apex:pageBlockTable value="{!LstPrm}" var="list">
+            <apex:column headerValue="ListParameters" value="{!list}"/>
+        </apex:pageBlockTable>
+    </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:page>

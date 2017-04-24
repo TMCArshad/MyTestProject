@@ -1,0 +1,90 @@
+<aura:component controller="AccountsController"  implements="force:appHostable">
+   <aura:attribute name="accounts" type="List" />
+   <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+   <!-- Use the Apex model and controller to fetch server side data -->
+   <table class="slds-table slds-table--bordered slds-max-medium-table--stacked-horizontal">
+      <thead>
+        <tr class="slds-text-heading--label">
+            <th class="slds-is-sortable" scope="col">
+                <div class="slds-truncate">Id
+                    <button class="slds-button slds-button--icon-bare">
+                        <c:svg ariaHidden="true" class="slds-button__icon slds-button__icon--small">
+              
+            			</c:svg>
+                        <span class="slds-assistive-text">Sort</span>
+                    </button>
+                </div>
+            </th>
+           <th class="slds-is-sortable" scope="col"><div class="slds-truncate">Name
+          <button class="slds-button slds-button--icon-bare">
+              <c:svg ariaHidden="true" class="slds-button__icon slds-button__icon--small">
+              
+            			</c:svg>
+            <span class="slds-assistive-text">Sort</span>
+          </button>
+        </div></th>
+           <th class="slds-is-sortable" scope="col"><div class="slds-truncate">Id
+          <button class="slds-button slds-button--icon-bare">
+              <c:svg ariaHidden="true" class="slds-button__icon slds-button__icon--small">
+              
+            			</c:svg>
+            <span class="slds-assistive-text">Type</span>
+          </button>
+        </div></th>
+           <th class="slds-is-sortable" scope="col"><div class="slds-truncate">Number of Employees
+          <button class="slds-button slds-button--icon-bare">
+              <c:svg ariaHidden="true" class="slds-button__icon slds-button__icon--small">
+              
+            			</c:svg>
+            <span class="slds-assistive-text">Sort</span>
+          </button>
+        </div></th>
+           <th class="slds-is-sortable" scope="col"><div class="slds-truncate">Ticker Symbol
+          <button class="slds-button slds-button--icon-bare">
+              <c:svg ariaHidden="true" class="slds-button__icon slds-button__icon--small">
+              
+            			</c:svg>
+            <span class="slds-assistive-text">Sort</span>
+          </button>
+        </div></th>
+           <th class="slds-is-sortable" scope="col"><div class="slds-truncate">Phone
+          <button class="slds-button slds-button--icon-bare">
+              <c:svg ariaHidden="true" class="slds-button__icon slds-button__icon--small">
+              
+            			</c:svg>
+            <span class="slds-assistive-text">Sort</span>
+          </button>
+        </div></th>
+           <th class="slds-is-sortable" scope="col"><div class="slds-truncate">Details
+          <button class="slds-button slds-button--icon-bare">
+              <c:svg ariaHidden="true" class="slds-button__icon slds-button__icon--small">
+              
+            			</c:svg>
+            <span class="slds-assistive-text">Sort</span>
+          </button>
+        </div></th>  
+        </tr>
+      </thead>
+      <tbody>
+        <aura:iteration items="{!v.accounts}" var="account">
+         <tr>
+           <td class="slds-truncate" scope="row" data-label="Id">{!account.Id}</td>
+           <td class="slds-truncate" scope="row" data-label="Name">{!account.Name}</td>                 
+           <td class="slds-truncate" scope="row" data-label="Type">{!account.Type}</td>
+           <td class="slds-truncate" scope="row" data-label="Number of Employee">{!account.NumberOfEmployees}</td>                 
+           <td class="slds-truncate" scope="row" data-label="Ticker Symbol">{!account.TickerSymbol}</td>
+           <td class="slds-truncate" scope="row" data-label="Phone">{!account.Phone}</td>
+           <td class="slds-truncate" scope="row" data-label="ACTIONS">
+                <c:button class="slds-button slds-button--neutral"
+                 label="Details"
+                 svgXlinkHref="/resource/SLDS100/assets/icons/standard-sprite/svg/symbols.svg#account"
+                 svgClass="slds-icon slds-icon-text-default"
+                 onclick="{!c.showDetails}"
+                 data="{!account.Id}"
+              />
+           </td>
+         </tr>
+        </aura:iteration>
+      </tbody>
+   </table>
+</aura:component>

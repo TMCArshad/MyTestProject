@@ -1,0 +1,15 @@
+<!-- 
+Version      : 1.0
+Company      : WebSolo Inc.
+Date         : 03.2015
+Description  : VF page "PopUpAutoCloseAndRefresh" 
+History      :             
+-->
+<apex:page sidebar="false" showHeader="false"  >
+    <div id="ch" style="display: none;"></div>
+    
+    <p style="font-size: 16px; font-weight: bold; margin-left: 10px">Pop Up Auto Close And Refresh Demo</p>
+    <apex:form >
+        dfgndfhdfjddhdh
+    </apex:form>
+</apex:page>

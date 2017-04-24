@@ -1,0 +1,60 @@
+<aura:component >
+	<h1 class="header">Hi THis is Header</h1>
+    
+    
+    <aura:attribute name="message" type="String"/>
+    <p class="para">This is message {!$Label.c.Greeting + v.message}</p>
+    
+    <ui:outputText value="{!'Hello'  + v.message}"/>
+    
+    <aura:attribute name="messages" type="List"
+        default="['You look nice today.',
+            'Great weather we\'re having.',
+            'How are you?']"/>
+
+
+    <h1>Hello Playground</h1>
+
+    <p>Silly fun with attributes and expressions.</p>
+
+
+    <h2>List Items</h2>
+
+    <p><c:helloMessage message="{!v.messages[0]}"/></p>
+    <p><c:helloMessage message="{!v.messages[1]}"/></p>
+    <p><c:helloMessage message="{!v.messages[2]}"/></p>
+
+
+    <h2>List Iteration</h2>
+
+    <aura:iteration items="{!v.messages}" var="msg">
+        <p><c:helloMessage message="{!msg}"/></p> 
+    </aura:iteration>
+
+
+    <h2>Conditional Expressions and Global Value Providers</h2>
+
+    <aura:if isTrue="{!$Browser.isIPhone}">
+        <p><c:helloMessage message="{!v.messages[0]}"/></p>
+    <aura:set attribute="else">
+        <p><c:helloMessage message="{!v.messages[1]}"/></p>
+        </aura:set>
+    </aura:if>
+	
+    <aura:component >
+ 
+
+ 
+    <p>Message of the day: <ui:outputText value="{!v.message}"/></p>
+ 
+    <div>
+        <ui:button label="You look nice today."
+            press="{!c.handleClick}"/>
+ 
+        <ui:button label="Today is going to be a great day!"
+            press="{!c.handleClick}"/>
+    </div>
+ 
+</aura:component>
+
+</aura:component>

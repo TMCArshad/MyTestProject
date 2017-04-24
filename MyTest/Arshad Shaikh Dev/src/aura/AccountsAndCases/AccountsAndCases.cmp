@@ -1,0 +1,20 @@
+<aura:component implements="force:appHostable">
+	<ltng:require styles="/resource/SLDS092/assets/styles/salesforce-lightning-design-system-ltng.min.css"
+                  scripts="/resource/materialize/js/jquery-2.1.1.min.js, 
+                           /resource/materialize/js/materialize.min.js"/>
+    
+    <aura:handler event="c:accountSelectionEvent" action="{!c.handleAccountSelection}"/>
+    <aura:handler event="c:navigateToAccounts" action="{!c.navigateToAccounts}"/>
+    
+    <div class="slds">
+        <div class="slds-grid">
+            <div class="slds-col slds-size--1-of-1">
+                <div aura:id="content" class="slds-scrollable--y" style="max-height:648px;">
+                	<c:AccountList />
+                </div>
+            </div>
+        </div>
+    </div>   
+    
+    <aura:if isTrue="false"></aura:if>
+</aura:component>

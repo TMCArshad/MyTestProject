@@ -1,0 +1,14 @@
+<apex:page standardController="Account" recordSetVar="Accounts" >
+    <apex:pageblock >
+        <apex:pageBlockTable value="{!Accounts}" var="acc">
+            <apex:column headerValue="Name">
+            <apex:outputLink value="/{!acc.ID}" >
+                    <apex:outputText value="{!acc.Name}"/>
+                </apex:outputLink>
+            </apex:column>
+            <apex:column value="{!acc.BillingCity}" headerValue="City"/>
+            <apex:column value="{!acc.Phone}" headerValue="Phone"/>
+            <apex:column value="{!acc.Website}" headerValue="Website"/>
+        </apex:pageBlockTable>
+    </apex:pageblock>
+</apex:page>

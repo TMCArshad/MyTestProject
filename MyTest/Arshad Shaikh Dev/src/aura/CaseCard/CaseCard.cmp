@@ -1,0 +1,29 @@
+<aura:component >
+    <aura:attribute name="case" type="Case"/>
+    <tr>
+        
+        <td>
+            <span aura:id="svg_content1">
+                <![CDATA[
+                                            <svg aria-hidden="true" class="slds-icon slds-icon--large slds-icon-text-default">
+                                                <use xlink:href="/resource/SLDS092/assets/icons/standard-sprite/svg/symbols.svg#contact"></use>
+                                            </svg>
+                                        ]]>
+            </span>
+            <ui:outputText value="{!v.case.Contact.Name}"/>
+        </td>
+        
+        <td>
+            <ui:outputText value="{!v.case.Subject}"/>
+        </td>
+        
+        <td>
+            <ui:outputText value="{!v.case.CreatedDate}"/>
+        </td>
+        
+        <td>
+            <ui:outputText value="{!v.case.Status}"/>
+        </td>
+        
+    </tr>
+</aura:component>

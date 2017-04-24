@@ -1,0 +1,17 @@
+<apex:page standardController="Demo__c" extensions="popupExtension">
+<apex:form >
+
+   <apex:commandButton value="Open popup" onclick="quicklink('/PopUpAutoCloseAndRefresh')"/>
+   <apex:detail subject="{!Demo__c.Id}" relatedList="true" title="true" inlineEdit="true" relatedListHover="true" showChatter="true"/> 
+  
+   
+   </apex:form>
+   
+   <script>
+   function quicklink(url) {
+window.opener.document.location.href(url);
+self.close();
+}      
+ }  
+ </script>
+</apex:page>
