@@ -1,8 +1,10 @@
 public with sharing class AccountController { 
-private string accountID = ''; 
+private string accountID = '';
+public String str{get;set;} 
 public Account accountItem{get;set;} 
 public AccountController(){ 
 //Constructor 
+//This is account Controller
 list<Account> accountList = new list<Account>(); 
 accountID = System.currentPageReference().getParameters().get('aId');    
 accountList = [Select ID, Name From Account Where ID = :accountID]; 
